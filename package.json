@@ -1,24 +1,42 @@
 {
   "name": "xbailz",
   "type": "module",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
   },
-  "description": "A WebSockets library for interacting with WhatsApp Web — fork of Baileys with extra socket layers (communities, interop, privacy, GraphQL) and special message helpers.",
+  "description": "A WebSocket client for interacting with WhatsApp Web.",
   "keywords": [
-    "baileys",
     "whatsapp",
-    "whatsapp-api",
     "whatsapp-web",
+    "whatsapp-api",
     "whatsapp-bot",
-    "wa-bot",
-    "websocket"
+    "whatsapp-automation",
+    "whatsapp-websocket",
+    "whatsapp-messaging",
+    "whatsapp-business",
+    "whatsapp-business-api",
+    "whatsapp-catalog",
+    "whatsapp-groups",
+    "whatsapp-communities",
+    "whatsapp-media",
+    "whatsapp-native-flow",
+    "whatsapp-interactive-messages",
+    "whatsapp-buttons",
+    "whatsapp-graphql",
+    "graphql-over-websocket",
+    "typescript",
+    "websocket",
+    "baileys",
+    "baileys-fork",
+    "libsignal",
+    "nodejs",
+    "automation"
   ],
-  "homepage": "https://github.com/Xrelly/wbails",
+  "homepage": "https://github.com/Xrelly-stack/xbailz",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Xrelly/wbails.git"
+    "url": "git+https://github.com/Xrelly-stack/xbailz.git"
   },
   "license": "MIT",
   "author": "xrelly",
@@ -29,34 +47,39 @@
     "engine-requirements.js"
   ],
   "scripts": {
-    "build:all": "tsc && typedoc",
+    "build:all": "npm run build && npm run build:docs",
     "build:docs": "typedoc",
-    "build:tsc": "tsc",
+    "build": "tsc -P tsconfig.build.json && tsc-esm-fix --tsconfig=tsconfig.build.json --ext=.js",
     "changelog:last": "conventional-changelog -p angular -r 2",
     "changelog:preview": "conventional-changelog -p angular -u",
+    "changelog:update": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
+    "example": "tsx ./Example/example.ts",
     "gen:protobuf": "sh WAProto/GenerateStatics.sh",
-    "lint": "eslint src --ext .js,.ts,.jsx,.tsx",
-    "lint:fix": "eslint src --fix --ext .js,.ts,.jsx,.tsx",
-    "prepack": "",
-    "prepare": "",
+    "format": "prettier --write \"src/**/*.{ts,js,json,md}\"",
+    "lint": "tsc && eslint src",
+    "lint:fix": "npm run format && npm run lint -- --fix",
+    "prepack": "npm run build",
+    "prepare": "npm run build",
     "preinstall": "node ./engine-requirements.js",
     "release": "release-it",
-    "test": "jest"
+    "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --testMatch '**/*.test.ts'",
+    "test:e2e": "NODE_TLS_REJECT_UNAUTHORIZED=0 node --experimental-vm-modules ./node_modules/jest/bin/jest.js --runInBand --forceExit --testMatch '**/*.test-e2e.ts'",
+    "update:version": "tsx ./scripts/update-version.ts"
   },
   "dependencies": {
     "@cacheable/node-cache": "^1.4.0",
     "@hapi/boom": "^9.1.3",
     "async-mutex": "^0.5.0",
-    "libsignal": "^6.0.0",
+    "cache-manager": "^7.2.8",
+    "libsignal": "github:XazepysK/libsignal-node",
     "lru-cache": "^11.1.0",
     "music-metadata": "^11.12.3",
     "p-queue": "^9.0.0",
     "pino": "^9.6",
     "protobufjs": "^7.5.6",
+    "wa-sticker-formatter": "^4.4.4",
     "whatsapp-rust-bridge": "0.5.4",
-    "ws": "^8.13.0",
-    "chalk": "^4.1.2",
-    "cache-manager": "^7.2.8"
+    "ws": "^8.13.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
@@ -140,5 +163,19 @@
   "packageManager": "yarn@4.9.2",
   "engines": {
     "node": ">=20.0.0"
+  },
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "import": "./lib/index.js",
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json",
+    "./WAProto": {
+      "types": "./WAProto/index.d.ts",
+      "import": "./WAProto/index.js",
+      "default": "./WAProto/index.js"
+    }
   }
 }

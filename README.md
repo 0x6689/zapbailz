@@ -1,330 +1,376 @@
-<div align="center">
+<p align="center">
+	<img src="https://raw.githubusercontent.com/Xrelly-stack/xbailz/main/Media/logo.png" alt="xbailz WhatsApp Web API logo" width="300" />
+</p>
 
-# @Xrelly-stack/xbailz
+<h1 align="center">xbailz - WhatsApp Web API and Automation Library</h1>
 
-A WebSocket-based library for interacting with WhatsApp Web — a fork of
-[Baileys](https://github.com/WhiskeySockets/Baileys) with additional socket layers
-(Communities, Interop, Privacy, GraphQL) and helpers for special message types
-such as payments, products, albums, events, poll results, and order messages.
+<p align="center">
+  A customized TypeScript WebSocket client for the WhatsApp Web protocol, WhatsApp bots, messaging automation, media, groups, communities, business catalogs, GraphQL, and interactive native-flow messages.
+  <br />
+	Modified and maintained by <b>xrelly</b> (<a href="https://github.com/Xrelly-stack">@Xrelly-stack</a>).
+</p>
 
-</div>
+<p align="center">
+	<a href="https://github.com/Xrelly-stack"><img src="https://img.shields.io/badge/GitHub-Xrelly--stack-181717?style=for-the-badge&logo=github" alt="GitHub Profile" /></a>
+  <a href="https://t.me/xrelly"><img src="https://img.shields.io/badge/Telegram-@xrelly-229ED9?style=for-the-badge&logo=telegram" alt="Telegram Profile" /></a>
+	<a href="https://github.com/Xrelly-stack/xbailz"><img src="https://img.shields.io/badge/GitHub_Package-xbailz-2088FF?style=for-the-badge&logo=github" alt="GitHub Package" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge" alt="License" /></a>
+  <a href="https://nodejs.org/"><img src="https://img.shields.io/badge/Node-%3E=20.0.0-339933?style=for-the-badge&logo=node.js" alt="Node Version" /></a>
+  <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-Strict-3178C6?style=for-the-badge&logo=typescript" alt="TypeScript" /></a>
+</p>
 
 ---
 
-> **Not affiliated with WhatsApp or Meta.** Using this library may violate
-> WhatsApp's Terms of Service. Use it at your own risk, and do not use it for spam.
+## About This Fork
 
-## Table of Contents
+**xbailz** is a TypeScript and Node.js WhatsApp Web API library for building WhatsApp bots, customer-support tools, messaging integrations, media workflows, group automation, and business communication systems without Selenium or Chromium. It communicates directly with WhatsApp Web over WebSocket and includes typed APIs for messages, authentication, Signal sessions, groups, communities, business catalogs, privacy, GraphQL, MEX, and interactive native-flow messages.
 
-- [Requirements](#requirements)
-- [Installation](#installation)
-- [Quick Start](#quick-start)
-  - [Login with QR Code](#login-with-qr-code)
-  - [Login with Pairing Code](#login-with-pairing-code)
-- [Store](#store)
-- [Sending Messages](#sending-messages)
-  - [Generic Send / Relay](#generic-send--relay)
-  - [Simple Senders](#simple-senders)
-  - [Special Message Types](#special-message-types)
-- [Events](#events)
-- [Examples](#examples)
-- [Known Limitations](#known-limitations)
-- [Contributing](#contributing)
-- [License](#license)
+xbailz is a customized distribution of Baileys maintained by **xrelly**. It is built for advanced WhatsApp automation, enhanced protocol compliance, native Rust acceleration, and full WhatsApp username features.
 
-## Requirements
+- GitHub Profile: [https://github.com/Xrelly-stack](https://github.com/Xrelly-stack)
+- Telegram Contact: [https://t.me/xrelly](https://t.me/xrelly)
+- Source Repository: [https://github.com/Xrelly-stack/xbailz](https://github.com/Xrelly-stack/xbailz)
 
-- Node.js **>= 20**
-- Optional peer dependencies depending on the features you use:
-  - `sharp` or `jimp` for image processing
-  - `link-preview-js` for link previews
-  - `audio-decode` for audio waveform handling
+---
+
+## Search Topics and Supported APIs
+
+This repository covers the following developer topics and API use cases:
+
+- WhatsApp Web API client for Node.js and TypeScript
+- WhatsApp bot development and automation
+- WhatsApp WebSocket protocol implementation
+- QR code and pairing-code authentication
+- WhatsApp text, media, document, sticker, poll, reaction, and location messages
+- WhatsApp buttons, lists, native-flow, and interactive messages
+- WhatsApp groups, communities, newsletters, and broadcast features
+- WhatsApp business profile, product catalog, collections, and commerce tools
+- WhatsApp privacy, blocklist, presence, and disappearing-message settings
+- WhatsApp GraphQL, MEX GraphQL-over-WebSocket, and business APIs
+- Signal Protocol sessions, multi-device authentication, LID mapping, and libsignal
+- In-memory, JSON, SQLite, and multi-file authentication stores
+
+## What is New in xbailz
+
+| Feature                         | Category     | Description                                                                                                                           |
+| ------------------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
+| Username Protocol (MEX + USync) | Core Feature | Full support for WhatsApp username queries: availability checks, claims, PIN security, contact lookups, and username recommendations. |
+| Community Management APIs       | Communities  | Manage WhatsApp Communities, subgroup hierarchies, member approval requests, participant roles, and invite links.                     |
+| Discrete Message Routing        | Messaging    | Added isSecret and isProtected routing flags to MessageRelayOptions to control fan-out and protect recipient device paths.            |
+| Message Simulation Engine       | Testing      | Built-in sendFakeMessage method on socket to simulate incoming/outgoing message upsert events without wire delays.                    |
+| Interactive Flow Nodes          | WABinary     | Enhanced button arguments and node filters for native flows, catalog previews, location requests, and business bots.                  |
+| Native Rust Cryptography        | Performance  | Accelerated MD5 and HKDF operations powered by whatsapp-rust-bridge.                                                                  |
+| Custom libsignal Integration    | Security     | Backed by an updated libsignal-node fork with LID-to-PN mapping support and full ambient type declarations.                           |
+| Optimized Reconnection Sync     | Resilience   | Reconnects bypass the 20-second history sync wait when prior sync state exists (accountSyncCounter > 0).                              |
+| Modern ESM and Yarn Berry       | Tooling      | Packaged with Yarn 4 Berry, strict TypeScript definitions, Prettier formatting, and GitHub Packages support.                          |
+
+---
 
 ## Installation
 
+### Option 1: Install from GitHub Packages
+
+Create or update your `.npmrc` file:
+
+```ini
+@xrelly-stack:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
+```
+
+Then install with your package manager:
+
 ```bash
-npm install @Xrelly-stack/xbailz
+npm install xbailz
 ```
 
-You can also add it to your package manifest as `baileys` or `@whiskeysockets/baileys`:
-
-```json
-{
-  "dependencies": {
-    "@whiskeysocket/baileys": "github:Xrelly-stack/xbailz"
-  }
-}
+```bash
+yarn add xbailz
 ```
 
-```js
-import makeWASocket from '@whiskeysocket/baileys'
-// or with CommonJS:
-const { default: makeWASocket } = require('@whiskeysocket/baileys')
+```bash
+pnpm add xbailz
 ```
+
+### Option 2: Install directly from GitHub
+
+```bash
+npm install github:Xrelly-stack/xbailz
+```
+
+```bash
+yarn add github:Xrelly-stack/xbailz
+```
+
+---
 
 ## Quick Start
 
-### Login with QR Code
+```typescript
+import makeWASocket, { DisconnectReason, useMultiFileAuthState } from 'xbailz'
+import { Boom } from '@hapi/boom'
 
-```js
-import makeWASocket, { Browsers, useMultiFileAuthState } from '@whiskeysocket/baileys'
+const startSock = async () => {
+	const { state, saveCreds } = await useMultiFileAuthState('baileys_auth_info')
 
-const { state, saveCreds } = await useMultiFileAuthState('auth_info')
+	const sock = makeWASocket({
+		auth: state,
+		printQRInTerminal: true
+	})
 
-const client = makeWASocket({
-  browser: Browsers.ubuntu('Chrome'),
-  printQRInTerminal: true,
-  auth: state
-})
+	sock.ev.on('creds.update', saveCreds)
 
-client.ev.on('creds.update', saveCreds)
+	sock.ev.on('connection.update', update => {
+		const { connection, lastDisconnect } = update
+
+		if (connection === 'close') {
+			const shouldReconnect = (lastDisconnect?.error as Boom)?.output?.statusCode !== DisconnectReason.loggedOut
+			if (shouldReconnect) {
+				startSock()
+			}
+		} else if (connection === 'open') {
+			console.log('Connected to WhatsApp successfully!')
+		}
+	})
+
+	sock.ev.on('messages.upsert', async ({ messages, type }) => {
+		if (type === 'notify') {
+			for (const msg of messages) {
+				if (!msg.key.fromMe && msg.key.remoteJid) {
+					console.log('Received message from:', msg.key.remoteJid)
+				}
+			}
+		}
+	})
+
+	return sock
+}
+
+startSock()
 ```
 
-### Login with Pairing Code
+---
 
-```js
-import makeWASocket, { Browsers, fetchLatestWAWebVersion, useMultiFileAuthState } from '@whiskeysocket/baileys'
+## WhatsApp Username API
 
-const { state, saveCreds } = await useMultiFileAuthState('auth_info')
-const { version } = await fetchLatestWAWebVersion()
+All username methods are available directly on the socket instance returned by `makeWASocket`:
 
-const client = makeWASocket({
-  browser: Browsers.ubuntu('Chrome'),
-  printQRInTerminal: false,
-  version,
-  auth: state
-})
+| Method                       | Parameters                                                           | Return Type                       | Description                                                                          |
+| ---------------------------- | -------------------------------------------------------------------- | --------------------------------- | ------------------------------------------------------------------------------------ |
+| `checkUsername`              | `username: string, includeSuggestions?: boolean, sessionId?: string` | `Promise<UsernameCheckResult>`    | Checks whether a username is available on WhatsApp and returns suggestions if taken. |
+| `setUsername`                | `username: string, options?: SetUsernameOptions`                     | `Promise<any>`                    | Claims and registers a username for the authenticated account, with optional PIN.    |
+| `checkAndSetUsername`        | `username: string, includeSuggestions?: boolean`                     | `Promise<any>`                    | Validates availability first, then automatically sets the username if free.          |
+| `deleteUsername`             | None                                                                 | `Promise<any>`                    | Removes the username currently associated with the authenticated account.            |
+| `getMyUsername`              | None                                                                 | `Promise<string \| null>`         | Retrieves the current registered username of the connected account.                  |
+| `setUsernamePin`             | `pin?: string \| null`                                               | `Promise<any>`                    | Sets or updates the security PIN for the account username.                           |
+| `findUserByUsername`         | `username: string, pin?: string`                                     | `Promise<FindUserResult \| null>` | Resolves a WhatsApp user JID and contact state from their username.                  |
+| `fetchContactUsernames`      | `...jids: string[]`                                                  | `Promise<any[]>`                  | Queries username records for a list of contact JIDs via USync.                       |
+| `checkUsernameMulti`         | `usernames: string[]`                                                | `Promise<any>`                    | Batch checks availability across multiple usernames in a single request.             |
+| `getUsernameRecommendations` | `source?: string`                                                    | `Promise<any>`                    | Requests server-recommended usernames for the current account profile.               |
 
-client.ev.on('creds.update', saveCreds)
+### Username Example
 
-if (!client.authState?.creds?.registered) {
-  const phoneNumber = '628XXXXXXXXXX' // international format, without '+'
-  const code = await client.requestPairingCode(phoneNumber)
-  // custom pairing code (8 characters):
-  // const code = await client.requestPairingCode(phoneNumber, 'YYYYYYYY')
-  console.log('Pairing code:', code)
+```typescript
+const result = await sock.checkUsername('mycustomname')
+if (result.available) {
+	await sock.setUsername('mycustomname')
+	console.log('Username successfully registered!')
+} else {
+	console.log('Username taken. Suggestions:', result.suggestions)
+}
+
+const target = await sock.findUserByUsername('alice')
+if (target) {
+	await sock.sendMessage(target.jid, { text: 'Hello Alice!' })
 }
 ```
 
-## Store
+---
 
-`makeInMemoryStore` creates a local cache for chats, contacts, and messages,
-which Baileys does not persist automatically by default.
+## Community Management API
 
-```js
-import makeWASocket, { makeInMemoryStore } from '@whiskeysocket/baileys'
-import pino from 'pino'
+| Method                               | Parameters                                                           | Description                                                            |
+| ------------------------------------ | -------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| `communityCreate`                    | `subject: string, body?: string`                                     | Creates a new WhatsApp Community.                                      |
+| `communityMetadata`                  | `jid: string`                                                        | Fetches metadata, description, and settings for a Community.           |
+| `communityFetchAllParticipating`     | None                                                                 | Lists all Communities the authenticated user is currently a member of. |
+| `communityFetchLinkedGroups`         | `jid: string`                                                        | Retrieves all linked announcement and sub-groups within a Community.   |
+| `communityLinkGroup`                 | `communityJid: string, groupJids: string[]`                          | Links existing groups into a Community.                                |
+| `communityUnlinkGroup`               | `communityJid: string, groupJid: string`                             | Unlinks a group from a Community.                                      |
+| `communityRequestParticipantsList`   | `jid: string`                                                        | Retrieves pending membership requests for a Community.                 |
+| `communityRequestParticipantsUpdate` | `jid: string, participants: string[], action: 'approve' \| 'reject'` | Approves or rejects membership requests.                               |
+| `communityParticipantsUpdate`        | `jid: string, participants: string[], action: ParticipantAction`     | Adds, removes, promotes, or demotes Community members.                 |
+| `communityUpdateDescription`         | `jid: string, description?: string`                                  | Updates the description of a Community.                                |
+| `communityUpdateSubject`             | `jid: string, subject: string`                                       | Updates the title of a Community.                                      |
 
-const store = makeInMemoryStore({
-  logger: pino().child({ level: 'silent', stream: 'store' })
-})
+---
 
-const client = makeWASocket({ /* ...other options */ })
-store.bind(client.ev)
+## Core Messaging Features
 
-client.ev.on('contacts.upsert', () => {
-  console.log('New contact:', Object.values(store.contacts))
-})
-```
+| Feature                 | Method                                                    | Supported Content                                |
+| ----------------------- | --------------------------------------------------------- | ------------------------------------------------ |
+| Text and Mentions       | `sock.sendMessage(jid, { text, mentions })`               | Extended text, URLs, contextInfo, quoted         |
+| Media Messages          | `sock.sendMessage(jid, { image, caption })`               | Images, videos, audio, documents, stickers       |
+| Buttons and Native Flow | `sock.sendMessage(jid, { ... })`                          | Native flows, interactive buttons, product lists |
+| Disappearing Messages   | `sock.sendMessage(jid, content, { ephemeralExpiration })` | Timed messages (24 hours, 7 days, 90 days)       |
+| Message Simulation      | `sock.sendFakeMessage(jid, content, opts)`                | Event pipeline testing and upsert simulation     |
+| Reaction                | `sock.sendMessage(jid, { react: { text, key } })`         | Emoji reactions to existing messages             |
 
-Need a persistent store such as Redis? Use `makeCacheManagerStore` — see the [API Reference](docs/API.md#store-libstore).
+---
 
-### Saving the Store to a File
+## Complete Socket API Reference
 
-`makeInMemoryStore` can read from and write to a local JSON file, so it can
-survive restarts without requiring an external database.
+Every method below is available on the socket returned by `makeWASocket`, unless marked as a package helper. All methods return a Promise unless stated otherwise. Types are exported from the package and can be imported directly.
 
-```js
-const store = makeInMemoryStore({ /* ... */ })
+### Connection, Authentication, and Transport
 
-// load once on startup, then auto-save every 10 seconds
-const stopAutoSave = store.writeToFileInterval('./store.json')
+| Methods |
+| --- |
+| `query`, `waitForMessage`, `waitForSocketOpen`, `sendRawMessage`, `sendNode`, `logout`, `end`, `registerSocketEndHandler`, `requestPairingCode`, `waitForConnectionUpdate` |
+| `onWhatsApp`, `uploadPreKeys`, `uploadPreKeysToServerIfRequired`, `digestKeyBundle`, `rotateSignedPreKey`, `sendUnifiedSession`, `sendWAMBuffer` |
+| `executeUSyncQuery`, `fetchAccountReachoutTimelock`, `fetchNewChatMessageCap`, `createCallLink`, `getBotListV2` |
 
-process.on('SIGINT', () => {
-  stopAutoSave()
-  process.exit(0)
-})
-```
+Common socket properties are `ev`, `user`, `authState`, `signalRepository`, `ws`, and `serverProps`.
 
-You can also manage it manually with `store.readFromFile(path)` and `store.writeToFile(path)`.
-See the [API Reference](docs/API.md#file-persistence-makeinmemorystore) for more details.
+### Messages, Receipts, and Media
 
-## Sending Messages
+| Methods |
+| --- |
+| `sendMessage`, `sendFakeMessage`, `relayMessage`, `sendReceipt`, `sendReceipts`, `readMessages`, `sendMessageAck` |
+| `sendRetryRequest`, `rejectCall`, `fetchMessageHistory`, `requestPlaceholderResend`, `updateMediaMessage` |
+| `sendPeerDataOperationMessage`, `updateMemberLabel`, `refreshMediaConn`, `getMediaHost`, `waUploadToServer` |
+| `issuePrivacyTokens`, `assertSessions`, `createParticipantNodes`, `getUSyncDevices` |
 
-### Generic Send / Relay
+`sendFakeMessage(jid, content, { pn, lid })` emits a realistic `messages.upsert` event with generated message ID, timestamp, participant metadata, push name, and LID addressing metadata.
 
-```js
-// relayMessage — sends a raw message object, bypassing the sendMessage pipeline
-await client.relayMessage(jid, { conversation: 'Hello from Baileys' }, {})
+Supported `sendMessage` content includes text, mentions, replies, images, videos, audio, documents, stickers, polls, reactions, locations, contacts, buttons, templates, lists, native-flow interactive buttons, carousels, Bloks widgets, sticker packs, and disappearing-message options.
 
-// sendMessage — the standard way to send a message
-await client.sendMessage(jid, { text: 'Hello from Baileys' })
-```
+### Groups
 
-### Simple Senders
+| Methods |
+| --- |
+| `groupMetadata`, `groupCreate`, `groupLeave`, `groupUpdateSubject`, `groupUpdateDescription`, `groupParticipantsUpdate` |
+| `groupRequestParticipantsList`, `groupRequestParticipantsUpdate`, `groupInviteCode`, `groupRevokeInvite`, `groupAcceptInvite` |
+| `groupRevokeInviteV4`, `groupAcceptInviteV4`, `groupGetInviteInfo`, `groupToggleEphemeral`, `groupSettingUpdate` |
+| `groupMemberAddMode`, `groupJoinApprovalMode`, `groupFetchAllParticipating` |
 
-All `sendX` helpers below are shortcuts built on top of `sendMessage`.
+### Communities
 
-```js
-await client.sendText(jid, 'Hi!', { contextInfo: { mentionedJid: [jid] } })
-await client.sendImage(jid, { url: './photo.jpg' }, 'image caption')
-await client.sendVideo(jid, { url: './clip.mp4' }, 'video caption')
-await client.sendAudio(jid, { url: './clip.mp3' })
-await client.sendLocation(jid, 'Location name', -6.2, 106.8, 'https://maps.example', '1234567890')
-await client.sendPoll(jid, 'Pick one', ['Option 1', 'Option 2', 'Option 3'], /* multiSelect */ true)
-await client.sendQuiz(jid, 'Correct answer?', ['1', '2', '3'], /* correctIndex */ '2')
-```
+| Methods |
+| --- |
+| `communityCreate`, `communityMetadata`, `communityLeave`, `communityCreateGroup`, `communityFetchAllParticipating`, `communityFetchLinkedGroups` |
+| `communityLinkGroup`, `communityUnlinkGroup`, `communityInviteCode`, `communityRevokeInvite`, `communityAcceptInvite` |
+| `communityRevokeInviteV4`, `communityAcceptInviteV4`, `communityGetInviteInfo`, `communityRequestParticipantsList`, `communityRequestParticipantsUpdate` |
+| `communityParticipantsUpdate`, `communityUpdateDescription`, `communityUpdateSubject`, `communityToggleEphemeral`, `communitySettingUpdate` |
+| `communityMemberAddMode`, `communityJoinApprovalMode` |
 
-### Special Message Types
+### AI Groups
 
-These are handled internally by the `Socket/luxu.js` helper and are invoked automatically
-by `sendMessage` or `relayMessage` whenever the payload contains one of the fields below.
+`aiGroupMetadata`, `aiGroupCreate`, `aiGroupAddBot`, `aiGroupLeave`, `aiGroupParticipantsUpdate`, `aiGroupUpdateSubject`, `aiGroupInviteCode`, `aiGroupRevokeInvite`, `aiGroupAcceptInvite`, `aiGroupSettingUpdate`, `aiGroupToggleEphemeral`
 
-### Rich Menu
+### Profile, Presence, Contacts, and Chats
 
-`richMenu` sends a rich response with an optional header image, action buttons, carousel cards, and an open-URL footer:
+| Methods |
+| --- |
+| `sendPresenceUpdate`, `presenceSubscribe`, `profilePictureUrl`, `updateProfilePicture`, `removeProfilePicture`, `updateProfileStatus`, `updateProfileName`, `getBusinessProfile` |
+| `fetchStatus`, `fetchDisappearingDuration`, `fetchBlocklist`, `updateBlockStatus`, `blockContact`, `unblockContact` |
+| `chatModify`, `addOrEditContact`, `removeContact`, `addLabel`, `addChatLabel`, `removeChatLabel`, `addMessageLabel`, `removeMessageLabel` |
+| `star`, `addOrEditQuickReply`, `removeQuickReply`, `resyncAppState`, `cleanDirtyBits` |
 
-```js
-await client.richMenu(jid, {
-  header: {
-    title: 'Menu',
-    image: { url: 'https://example.com/banner.png' }
-  },
-  body: {
-    title: 'Choose an option',
-    buttons: ['Profile', 'Help']
-  },
-  footer: {
-    text: 'Open website',
-    url: 'https://example.com'
-  }
-})
-```
+### Privacy Settings
 
-### Split Payment
+| Methods |
+| --- |
+| `fetchPrivacySettings`, `setPrivacySetting`, `setCallAddPrivacy`, `setLastSeenPrivacy`, `setOnlinePrivacy`, `setProfilePicturePrivacy` |
+| `setStatusPrivacy`, `setReadReceiptsPrivacy`, `setGroupsAddPrivacy`, `updateDisableLinkPreviewsPrivacy`, `updateCallPrivacy`, `updateMessagesPrivacy` |
+| `updateLastSeenPrivacy`, `updateOnlinePrivacy`, `updateProfilePicturePrivacy`, `updateStatusPrivacy`, `updateReadReceiptsPrivacy`, `updateGroupsAddPrivacy`, `updateDefaultDisappearingMode` |
 
-`splitPayment` is a convenience wrapper that is converted to the native
-`splitPaymentMessage` protobuf shape. Amounts use human units and default to
-an offset of `1000`.
+### Newsletters
 
-```js
-await client.sendMessage(jid, {
-  splitPayment: {
-    splitId: 'makan-01',
-    total: 150000,
-    currency: 'IDR',
-    description: 'Makan bareng',
-    requesterJid: '628000000000@s.whatsapp.net',
-    participants: [
-      { jid: '628111111111@s.whatsapp.net', amount: 50000 },
-      { jid: '628222222222@s.whatsapp.net', amount: 100000, status: 'PAID' }
-    ]
-  }
-})
-```
+`newsletterCreate`, `newsletterUpdate`, `newsletterSubscribers`, `newsletterMetadata`, `newsletterFollow`, `newsletterUnfollow`, `newsletterMute`, `newsletterUnmute`, `newsletterUpdateName`, `newsletterUpdateDescription`, `newsletterUpdatePicture`, `newsletterRemovePicture`, `newsletterReactMessage`, `newsletterFetchMessages`, `subscribeNewsletterUpdates`, `newsletterAdminCount`, `newsletterChangeOwner`, `newsletterDemote`, `newsletterDelete`
 
-For direct protobuf use, `splitPaymentMessage` remains supported as well.
+### Business and Commerce
 
-```js
-// Product message (catalog)
-await client.relayMessage(jid, {
-  productMessage: {
-    title: 'Product Name',
-    description: 'Product description',
-    thumbnail: { url: './product.jpg' },
-    productId: 'PRODUCT_ID',
-    retailerId: 'RETAILER_ID',
-    url: 'https://store.example/product',
-    body: 'Body text',
-    footer: 'Footer text',
-    priceAmount1000: 72502, // price x 1000
-    currencyCode: 'IDR'
-  }
-}, {})
+`getOrderDetails`, `getCatalog`, `getCollections`, `productCreate`, `productDelete`, `productUpdate`, `updateBussinesProfile`, `updateCoverPhoto`, `removeCoverPhoto`
 
-// Order message
-await client.sendMessage(jid, {
-  thumbnail: fs.readFileSync('./thumb.jpg'),
-  message: 'Order details',
-  orderTitle: 'Store Name',
-  totalAmount1000: 72502,
-  totalCurrencyCode: 'IDR'
-}, { quoted: m })
+### GraphQL and MEX
 
-// Poll result snapshot (usually from a newsletter)
-await client.sendMessage(jid, {
-  pollResultMessage: {
-    name: 'Poll Title',
-    options: [{ optionName: 'Option 1' }, { optionName: 'Option 2' }],
-    newsletter: { newsletterName: 'Newsletter Name', newsletterJid: '1234567890@newsletter' }
-  }
-})
+Package helpers exported from the main entry point:
 
-// Interactive message (button)
-await client.sendMessage(jid, {
-  image: { url: './banner.jpg' },
-  text: 'Message body',
-  title: 'Title',
-  footer: 'Footer',
-  interactiveButtons: [{
-    name: 'cta_url',
-    buttonParamsJson: JSON.stringify({ display_text: 'Visit', url: 'https://example.com' })
-  }]
-})
+- `executeWWWGraphQL`
+- `executeFacebookGraphQL`
+- `executeWamoGraphQL`
+- `executeWMexQuery`
 
-// Group member label
-await client.sendMessage(jid, {
-  groupLabel: { labelText: 'Admin' }
-})
+`executeWMexQuery` is also available as a socket method. The package additionally exports the GraphQL and MEX types and constants used by these helpers.
 
-// Broadcast to specific group members
-await client.sendMessageMembers(jid, { extendedTextMessage: { text: 'Announcement' } }, {})
-```
+### Interoperability
 
-> Fields such as `sender` and `participant: true` in the second argument of
-> `sendMessage` or `relayMessage` are used to provide group-participant context.
-> See the [API Reference](docs/API.md) for details on each socket layer.
+| Methods |
+| --- |
+| `fetchIntegrators`, `acceptInteropTOS`, `optInIntegrators`, `optOutIntegrators`, `resolveInteropUsers`, `resolveInteropUser` |
+| `getReachabilitySettings`, `setReachabilitySettings`, `blockInteropUser`, `unblockInteropUser`, `reportInteropSpam`, `trustInteropContact` |
+| `initInterop`, `createInteropGroup`, `leaveInteropGroup`, `addParticipantsToInteropGroup`, `queryInteropGroupInfo` |
+| `queryInteropPrivacySettings`, `updateInteropPrivacySetting`, `updateInteropPrivacySettingWithContactList`, `getInteropGroupAddPrivacy` |
 
-## Events
+The socket also exposes `INTEGRATOR_BIRDYCHAT`, `INTEGRATOR_HAIKET`, and `INTEROP_MEX_QUERY_IDS`.
 
-All interactions are exposed through events on `client.ev`:
+### Registration, Password, Passkeys, and Account Recovery
 
-```js
-client.ev.on('connection.update', ({ connection, lastDisconnect }) => {
-  console.log('Connection status:', connection)
-})
+| Methods |
+| --- |
+| `hasPassword`, `setPassword`, `checkPassword`, `deletePassword`, `passkeyExists`, `passkeyListExists`, `passkeyRequestChallenge`, `passkeyVerifyChallenge`, `passkeyDelete` |
+| `regPasskeyStart`, `regPasskeyFinish`, `regPasskeyEnable`, `regPasskeyDisable`, `regPasskeyClear`, `regPasskeyUpdateEncryptionStatus` |
+| `getRegistrationUpsells`, `getDynamicRegistrationUpsells`, `registrationUpsellShown`, `registrationDynamicUpsellShown`, `regAccountTransferVerifyToken` |
+| `userCountryCodeGet`, `suggestedContactsV2`, `ageCollection`, `getAgeExperience`, `setAgeExperience`, `submitAge` |
+| `getImagineMeOnboarded`, `deleteImagineMeOnboarding`, `fetchUserNoticesById`, `createEnforcementAppeal`, `getWaMeLink` |
 
-client.ev.on('messages.upsert', ({ messages, type }) => {
-  for (const m of messages) {
-    console.log('Incoming message:', m.message)
-  }
-})
+The socket exposes the `REGISTRATION_MEX_IDS` constant.
 
-client.ev.on('creds.update', saveCreds)
-```
+### Managed Accounts, Payment Passkeys, UPI, and IPLS
 
-See the full list of available events in `lib/Types/Events.js`.
+| Methods |
+| --- |
+| `managedAccountQuery`, `managedAccountInitiateLinking`, `managedAccountValidateLinking`, `managedAccountAcceptLinking`, `managedAccountCompleteLinking`, `managedAccountRevokeLinking` |
+| `managedAccountSyncActivities`, `managedAccountUpdatePin`, `managedAccountGetSponsorAgeVerification` |
+| `paymentsPasskeyHasCredential`, `paymentsPasskeyEnrollChallenge`, `paymentsPasskeyEnrollVerify`, `paymentsPasskeyRegisterFinish`, `paymentsPasskeyAuthChallenge` |
+| `paymentsPasskeyToggleOn`, `paymentsPasskeyToggleOff`, `paymentsPasskeyToggleChallenge`, `paymentsPasskeyToggleCleanup`, `paymentsPasskeyCleanup`, `paymentsIsAccountRecoverable` |
+| `upiSendOtp`, `upiVerifyOtp`, `iplsHandshakeInit`, `iplsClientHello`, `iplsdClientHelloV2`, `iplsdClientInitV2` |
 
-## Examples
+The socket exposes the `MANAGED_ACCOUNT_MEX_IDS` constant.
 
-Ready-to-run examples are available in [examples/](examples):
+### Package Exports
 
-- [examples/qr-login.js](examples/qr-login.js) — QR login with automatic reconnection
-- [examples/pairing-code.js](examples/pairing-code.js) — pairing code login
-- [examples/store-usage.js](examples/store-usage.js) — using the in-memory store
+The package exports `makeWASocket` as both a named and default export, the `WASocket` type, all generated `WAProto` definitions, and public modules from `Utils`, `Types`, `Defaults`, `WABinary`, `WAM`, `WAUSync`, `Store`, `GraphQL`, and `MEX`. Username types include `FindUserResult`, `SetUsernameOptions`, and `UsernameCheckResult`.
 
-## Known Limitations
+---
 
-- **No `.d.ts` files for `lib/`** — only `WAProto` ships TypeScript definitions. Full autocomplete requires the TypeScript source, which is not included in this build.
-- **Console banner on import** — every time the package is imported, an ASCII art banner and promotional link are printed to stdout. In production or multi-instance setups, this can become noisy.
-- **`optionHash` for per-option image polls** is not implemented — it appears to require further reverse-engineering at the WhatsApp APK level.
-- See the [API Reference](docs/API.md#️-important-notes) for additional technical notes.
-
-## Contributing
-
-Issues and pull requests are welcome. Before submitting a PR, please run:
+## Development and Building
 
 ```bash
-npm run lint
-npm test
+corepack enable
+yarn install
+yarn build
+yarn lint
+yarn test
 ```
+
+---
+
+## Maintainer and Contact
+
+- Author: **XazepysK**
+- GitHub: [https://github.com/xazepysk](https://github.com/xazepysk)
+- Telegram: [https://t.me/xrelly](https://t.me/xrelly)
+- Project: [https://github.com/Xrelly-stack/xbailz](https://github.com/Xrelly-stack/xbailz)
+
+---
+
+## Disclaimer
+
+This project is not affiliated, associated, authorized, endorsed by, or in any way officially connected with WhatsApp or Meta Platforms, Inc. Use at your own discretion.
+
+## License
+
+Copyright (c) 2026 xrelly / XazepysK
+
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
