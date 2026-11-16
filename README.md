@@ -1,10 +1,4 @@
 <p align="center">
-	<img src="https://raw.githubusercontent.com/0x6689/zapbailz/main/Media/logo.png" alt="xbailz WhatsApp Web API logo" width="300" />
-</p>
-
-<h1 align="center">xbailz - WhatsApp Web API and Automation Library</h1>
-
-<p align="center">
   A customized TypeScript WebSocket client for the WhatsApp Web protocol, WhatsApp bots, messaging automation, media, groups, communities, business catalogs, GraphQL, and interactive native-flow messages.
   <br />
 	Modified and maintained by <b>xrelly</b> (<a href="https://github.com/Xrelly-stack">@0x6689</a>).
