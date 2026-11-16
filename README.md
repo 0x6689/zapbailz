@@ -1,5 +1,5 @@
 <p align="center">
-	<img src="https://raw.githubusercontent.com/Xrelly-stack/xbailz/main/Media/logo.png" alt="xbailz WhatsApp Web API logo" width="300" />
+	<img src="https://raw.githubusercontent.com/0x6689/zapbailz/main/Media/logo.png" alt="xbailz WhatsApp Web API logo" width="300" />
 </p>
 
 <h1 align="center">xbailz - WhatsApp Web API and Automation Library</h1>
@@ -7,11 +7,11 @@
 <p align="center">
   A customized TypeScript WebSocket client for the WhatsApp Web protocol, WhatsApp bots, messaging automation, media, groups, communities, business catalogs, GraphQL, and interactive native-flow messages.
   <br />
-	Modified and maintained by <b>xrelly</b> (<a href="https://github.com/Xrelly-stack">@Xrelly-stack</a>).
+	Modified and maintained by <b>xrelly</b> (<a href="https://github.com/Xrelly-stack">@0x6689</a>).
 </p>
 
 <p align="center">
-	<a href="https://github.com/Xrelly-stack"><img src="https://img.shields.io/badge/GitHub-Xrelly--stack-181717?style=for-the-badge&logo=github" alt="GitHub Profile" /></a>
+	<a href="https://github.com/0x6689"><img src="https://img.shields.io/badge/GitHub-Xrelly--stack-181717?style=for-the-badge&logo=github" alt="GitHub Profile" /></a>
   <a href="https://t.me/xrelly"><img src="https://img.shields.io/badge/Telegram-@xrelly-229ED9?style=for-the-badge&logo=telegram" alt="Telegram Profile" /></a>
 	<a href="https://github.com/Xrelly-stack/xbailz"><img src="https://img.shields.io/badge/GitHub_Package-xbailz-2088FF?style=for-the-badge&logo=github" alt="GitHub Package" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge" alt="License" /></a>
