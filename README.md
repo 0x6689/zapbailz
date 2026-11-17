@@ -1,7 +1,7 @@
 zapbailz
 
 <p align="center">
-<img src="https://raw.githubusercontent.com/0x6689/zapbailz/main/Media/logo.png" alt="zapbailz logo" width="280" />
+<img src="https://raw.githubusercontent.com/0x6689/zapbailz/main/Media/logo.jpg" alt="zapbailz logo" width="280" />
 </p> <p align="center">
   <strong>Modified WhatsApp Web API for Node.js and TypeScript</strong>
 </p> <p align="center">
