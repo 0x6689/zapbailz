@@ -1,5 +1,3 @@
-zapbailz
-
 <p align="center">
 <img src="https://raw.githubusercontent.com/0x6689/zapbailz/main/Media/logo.jpg" alt="zapbailz logo" width="280" />
 </p> <p align="center">
